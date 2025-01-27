@@ -1,0 +1,28 @@
+{
+    "instructions": {
+        "input_schema": {
+            "code_chunk": "string (a hunk of code that may contain import statements)",
+            "function_or_object_name": "string (the name of the function or object being imported)",
+            "file_path": "string (the file path from which the function or object is imported)",
+            "language": "string (the programming language of the code, e.g., 'Python', 'JavaScript', 'C++')"
+        },
+        "output_schema": {
+            "line_range": "object (with 'start_line' and 'end_line' fields indicating the range of lines where the import statement occurs, starting from 1)",
+            "status": "string ('valid' if the import statement is found, 'no_match' if no matching import is found, 'invalid_input' if the code chunk does not contain import statements, 'insufficient_context' if the code chunk does not provide enough information to determine the import)"
+        },
+        "task_description": "Your task is to identify the range of lines (start and end) where the given function or object is imported from the specified file path in the provided code chunk. The line numbers should start from 1. If the import statement spans only one line, the start and end line should be the same. If no matching import is found, set the status to 'no_match'. If the input does not contain import statements, set the status to 'invalid_input'. If the code chunk does not provide enough information to determine the import, set the status to 'insufficient_context'. Return only the 'output_schema' as valid JSON."
+    },
+    "sample_input": {
+        "code_chunk": "import numpy as np\nfrom my_module import my_function\nimport pandas as pd",
+        "function_or_object_name": "my_function",
+        "file_path": "my_module",
+        "language": "Python"
+    },
+    "expected_output": {
+        "line_range": {
+            "start_line": 2,
+            "end_line": 2
+        },
+        "status": "valid"
+    }
+}

@@ -2,7 +2,7 @@ use std::{collections::HashMap, path::PathBuf};
 
 use serde::{Deserialize, Serialize};
 
-use crate::graph::utils::numbered_content;
+use crate::{graph::utils::numbered_content, utils::prompts::get_prompt_path};
 
 use super::{function_call::FunctionCall, gitops::HunkDiffLines, utils::{call_llm_api, read_file, strip_json_prefix}};
 
@@ -125,7 +125,7 @@ pub struct FunctionDefIdentifier {
 
 impl FunctionDefIdentifier {
     pub fn new() -> Option<Self> {
-        let system_prompt_opt = read_file("/app/prompts/prompt_function_def");
+        let system_prompt_opt = read_file(&format!("{}/prompt_function_def", get_prompt_path()));
         if system_prompt_opt.is_none() {
             log::error!("[function_calls_in_chunk] Unable to read prompt_function_def");
             return None;
@@ -340,13 +340,13 @@ struct LlmFuncBoundaryResponse {
 
 pub async fn generate_function_map(file_paths: &Vec<PathBuf>) -> Option<AllFileFunctions> {
     let mut all_file_functions = AllFileFunctions { func_map: HashMap::new() };
-    let system_prompt_opt = read_file("/app/prompts/prompt_function_lines");
+    let system_prompt_opt = read_file(&format!("{}/prompt_function_lines", get_prompt_path()));
     if system_prompt_opt.is_none() {
         log::error!("[generate_function_map] Unable to read prompt_function_lines");
         return None;
     }
     let system_prompt_lines = system_prompt_opt.expect("Empty system_prompt");
-    let system_prompt_end_opt = read_file("/app/prompts/prompt_function_boundary");
+    let system_prompt_end_opt = read_file(&format!("{}/prompt_function_boundary", get_prompt_path()));
     if system_prompt_end_opt.is_none() {
         log::error!("[generate_function_map] Unable to read prompt_function_boundary");
         return None;
@@ -401,7 +401,7 @@ pub async fn generate_function_map(file_paths: &Vec<PathBuf>) -> Option<AllFileF
 }
 
 pub async fn get_function_def_for_func_call(filepath: &PathBuf, func_call_line_num: usize) -> Option<LlmFuncDef> {
-    let system_prompt_opt = read_file("/app/prompts/prompt_function_lines");
+    let system_prompt_opt = read_file(&format!("{}/prompt_function_lines", get_prompt_path()));
     if system_prompt_opt.is_none() {
         log::error!("[get_function_def_for_func_call] Unable to read prompt_function_lines");
         return None;

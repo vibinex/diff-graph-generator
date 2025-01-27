@@ -7,7 +7,7 @@ use std::fs;
 use rand::Rng;
 use once_cell::sync::Lazy;
 
-use crate::utils::{gitops::StatItem, reqwest_client::get_client};
+use crate::utils::{gitops::StatItem, prompts::get_prompt_path, reqwest_client::get_client};
 
 #[derive(Debug, Serialize, Default, Deserialize, Clone)]
 struct LlmResponse {
@@ -18,7 +18,7 @@ struct LlmResponse {
 }
 
 static TOKEN: Lazy<String> = Lazy::new(|| {
-    fs::read_to_string("/app/prompts/hf_token").expect("Failed to read hf_token file")
+    fs::read_to_string(&format!("{}/prompts/hf_token", get_prompt_path())).expect("Failed to read hf_token file")
 });
 
 pub async fn call_llm_api(prompt: String) -> Option<String> {

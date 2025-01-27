@@ -1,0 +1,33 @@
+{
+  "instructions": {
+    "input_schema": {
+      "function_name": "string (the name of the function that was called in the git diff)",
+      "code_chunk": "string (code with line numbers embedded, each line is numbered as it appears in the original file)",
+      "language": "string (the programming language of the code, e.g., 'Java', 'Python', 'Rust', etc.)",
+      "file_path": "string (the path of the file from which the code chunk is extracted)"
+    },
+    "output_schema": {
+      "matching_import": {
+        "line_number": "integer",
+        "import_statement": "string",
+        "possible_file_path": "string"
+      },
+      "notes": "string (optional)"
+    },
+    "task_description": "Your task is to identify which import statement in the provided input corresponds to the given function name. Analyze the code to find an import statement that could be responsible for importing the function specified by 'function_name'. Based on the programming language provided, infer the possible file path for the module or file that contains the function. Return only the 'output_schema' as valid JSON"
+  },
+  "sample_input": {
+    "function_name": "train",
+    "code_chunk": "1 import my_lib.utils as utils\n2 from my_lib.models import Model\n3 def train_model():\n4    model = Model()\n5    utils.train(model)\n6    return model",
+    "language": "Python",
+    "file_path": "src/train.py"
+  },
+  "expected_output": {
+    "matching_import": {
+      "line_number": 1,
+      "import_statement": "import my_lib.utils as utils",
+      "possible_file_path": "my_lib/utils.py"
+    },
+    "notes": "The 'train' function is imported from 'my_lib.utils' under the alias 'utils'."
+  }
+}

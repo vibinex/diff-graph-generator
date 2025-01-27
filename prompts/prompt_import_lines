@@ -1,0 +1,31 @@
+{
+    "instructions": {
+        "input_schema": {
+            "code_chunk": "string (a chunk of code from a source file)",
+            "language": "string (the programming language of the code, e.g., 'Python', 'Java', 'C++')"
+        },
+        "output_schema": {
+            "import_ranges": [
+                {
+                    "start_line": "integer (the starting line number of the import statement range, inclusive)",
+                    "end_line": "integer (the ending line number of the import statement range, inclusive)"
+                }
+            ],
+            "status": "string ('valid' if import statements are found, 'no_imports' if no import statements are present, 'insufficient_context' if the provided code chunk does not contain enough information to determine the range of import statements)"
+        },
+        "task_description": "Your task is to identify the range of lines containing import statements in the given code chunk based on the specified programming language. If multiple separate ranges of import statements exist, return them all. If no import statements are found, set the status to 'no_imports'. If the code chunk does not provide enough information to determine a complete multi-line import statement, set the status to 'insufficient_context'. Return only the 'output_schema' as valid JSON."
+    },
+    "sample_input": {
+        "code_chunk": "0 import numpy as np\n1 import pandas as pd\n2 import metrics\n2 def foo():\n3     print('Hello World')",
+        "language": "Python"
+    },
+    "expected_output": {
+        "import_ranges": [
+            {
+                "start_line": 0,
+                "end_line": 2
+            }
+        ],
+        "status": "valid"
+    }
+}

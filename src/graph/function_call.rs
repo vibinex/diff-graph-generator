@@ -3,6 +3,8 @@ use std::{collections::{HashMap, HashSet}, io::BufReader, path::{Path, PathBuf},
 use serde::{Deserialize, Serialize};
 use std::io::BufRead;
 
+use crate::utils::prompts::get_prompt_path;
+
 use super::{file_imports::ImportDefOutput, function_name::FunctionDefinition, gitops::HunkDiffLines, utils::{call_llm_api, detect_language, numbered_content, read_file, strip_json_prefix}};
 
 #[derive(Debug, Serialize, Default, Deserialize, Clone)]
@@ -29,7 +31,7 @@ pub struct FunctionCallInput {
 }
 
 pub async fn function_calls_in_chunk(chunk: &str, func_name: &str) -> Option<FunctionCallChunk>{
-    let system_prompt_opt = read_file("/app/prompts/prompt_function_call");
+    let system_prompt_opt = read_file(&format!("{}/prompt_function_call", get_prompt_path()));
     if system_prompt_opt.is_none() {
         log::error!("[function_calls_in_chunk] Unable to read prompt_function_call");
         return None;
@@ -279,7 +281,7 @@ pub struct FunctionCallIdentifier {
 
 impl FunctionCallIdentifier {
     pub fn new() -> Option<Self> {
-        let system_prompt_opt = read_file("/app/prompts/prompt_function_calls");
+        let system_prompt_opt = read_file(&format!("{}/prompt_function_calls", get_prompt_path()));
         if system_prompt_opt.is_none() {
             log::error!("[function_calls_in_chunk] Unable to read prompt_function_calls");
             return None;
@@ -511,7 +513,7 @@ pub struct FunctionCallValidator {
 
 impl FunctionCallValidator {
     pub fn new() -> Option<Self> {
-        let system_prompt_opt = read_file("/app/prompts/prompt_function_call_validator");
+        let system_prompt_opt = read_file(&format!("{}/prompt_function_call_validator", get_prompt_path()));
         if system_prompt_opt.is_none() {
             log::debug!("[FunctionCallValidator/new] Unable to read prompt_function_call_validator");
             return None;

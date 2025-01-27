@@ -1,6 +1,8 @@
 use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
+use crate::utils::prompts::get_prompt_path;
+
 use super::{function_line_range::FunctionDefIdentifier, utils::{call_llm_api, numbered_content, read_file, strip_json_prefix}};
 
 // Struct to represent the output schema
@@ -108,7 +110,7 @@ pub struct FunctionNameIdentifier {
 
 impl FunctionNameIdentifier {
     pub fn new() -> Option<Self> {
-        let system_prompt_opt = read_file("/app/prompts/prompt_function_name");
+        let system_prompt_opt = read_file(&format!("{}/prompt_function_name", get_prompt_path()));
         if system_prompt_opt.is_none() {
             log::error!("[FunctionNameIdentifier/new] Unable to read prompt_function_name");
             return None;
@@ -122,7 +124,7 @@ impl FunctionNameIdentifier {
         }
         let prompt_json: FunctionNamePrompt = prompt_json_res.expect("Empty error in prompt_json_res");
 
-        let system_prompt_validation_opt = read_file("/app/prompts/prompt_valid_function_def");
+        let system_prompt_validation_opt = read_file(&format!("{}/prompt_valid_function_def", get_prompt_path()));
         if system_prompt_validation_opt.is_none() {
             log::error!("[FunctionNameIdentifier/new] Unable to read prompt_valid_function_def");
             return None;
@@ -278,7 +280,7 @@ pub struct DefinitionIdentifier {
 
 impl DefinitionIdentifier {
     pub fn new() -> Option<Self> {
-        let def_system_prompt_opt = read_file("/app/prompts/prompt_definition");
+        let def_system_prompt_opt = read_file(&format!("{}/prompt_definition", get_prompt_path()));
         if def_system_prompt_opt.is_none() {
             log::error!("[DefintionIdentifier/new] Unable to read prompt_definition");
             return None;
@@ -292,7 +294,7 @@ impl DefinitionIdentifier {
         }
         let def_prompt_json: DefintionPrompt = def_prompt_json_res.expect("Empty error in def_prompt_json_res");
 
-        let system_prompt_validation_opt = read_file("/app/prompts/prompt_valid_function_def");
+        let system_prompt_validation_opt = read_file(&format!("{}/prompt_valid_function_def", get_prompt_path()));
         if system_prompt_validation_opt.is_none() {
             log::error!("[DefintionIdentifier/new] Unable to read prompt_valid_function_def");
             return None;

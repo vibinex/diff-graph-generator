@@ -3,7 +3,7 @@ use std::{collections::HashMap, path::PathBuf};
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 
-use crate::{graph::utils::numbered_content};
+use crate::{graph::utils::numbered_content, utils::prompts::get_prompt_path};
 
 use super::utils::{all_code_files, call_llm_api, read_file, strip_json_prefix};
 
@@ -96,7 +96,7 @@ pub struct ImportIdentifier {
 
 impl ImportIdentifier {
     pub fn new() -> Option<Self> {
-        let system_prompt_opt = read_file("/app/prompts/prompt_import_file_path");
+        let system_prompt_opt = read_file(&format!("{}/prompt_import_file_path", get_prompt_path()));
         if system_prompt_opt.is_none() {
             log::debug!("[ImportIdentifier/new] Unable to read prompt_import_file");
             return None;
@@ -268,7 +268,7 @@ pub struct ImportLinesIdentifier {
 
 impl ImportLinesIdentifier {
     pub fn new() -> Option<Self> {
-        let system_prompt_opt = read_file("/app/prompts/prompt_import_lines");
+        let system_prompt_opt = read_file(&format!("{}/prompt_import_lines", get_prompt_path()));
         if system_prompt_opt.is_none() {
             log::debug!("[ImportLinesIdentifier/new] Unable to read prompt_import_lines");
             return None;
@@ -437,7 +437,7 @@ pub struct ImportDefIdentifier {
 
 impl ImportDefIdentifier {
     pub fn new() -> Option<Self> {
-        let system_prompt_opt = read_file("/app/prompts/prompt_import_def");
+        let system_prompt_opt = read_file(&format!("{}/prompt_import_def", get_prompt_path()));
         if system_prompt_opt.is_none() {
             log::debug!("[ImportDefIdentifier/new] Unable to read prompt_import_def");
             return None;

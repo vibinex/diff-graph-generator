@@ -1,0 +1,23 @@
+{
+    "instructions": {
+        "input_schema": {
+            "code_line": "string (a line of code that possibly contains a function, object, or structural definition as it appears in the original file)",
+            "language": "string (the programming language of the code, e.g., 'Java', 'Python', 'Rust', etc.)"
+        },
+        "output_schema": {
+            "is_definition": "boolean (true if the line is a valid function, object, or structural definition for the given language, false otherwise)",
+            "status": "string ('valid', 'invalid_input', or 'insufficient_context')",
+            "notes": "string (optional, to explain the decision)"
+        },
+        "task_description": "Determine if the given code line represents a valid function, object, or structural definition in the specified programming language. Do not classify import statements, module declarations, or other non-definitional lines as valid definitions. If the line introduces a new function, object, struct, trait, or implementation block, set 'is_definition' to true and 'status' to 'valid'. Otherwise, set 'is_definition' to false and 'status' to 'invalid_input'. If the context is insufficient to decide, set 'status' to 'insufficient_context'. Return only the 'output_schema' as valid JSON."
+    },
+    "sample_input": {
+         "code_line": "def train_model(model_id, model_type,",
+         "language": "python"
+     },
+     "expected_output": {
+         "is_definition": true,
+         "status": "valid",
+         "notes": "The 'def' keyword and syntax indicate a valid Python function definition."
+     }
+}

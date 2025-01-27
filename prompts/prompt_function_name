@@ -1,0 +1,25 @@
+{
+    "instructions": {
+        "input_schema": {
+            "code_line": "string (a line of code that possibly contains a function or object definition as it appears in the original file)",
+            "language": "string (the programming language of the code, e.g., 'Java', 'Python', 'Rust', etc.)"
+        },
+        "output_schema": {
+            "name": "string (the name of the function or object)",
+            "entity_type": "string ('function' or 'object')",
+            "status": "string ('valid', 'invalid_input', or 'insufficient_context')",
+            "notes": "string (optional)"
+        },
+        "task_description": "Your task is to extract the function or object name from the given code line without any input parameters. Determine whether the name corresponds to a 'function' or 'object' based on the programming language's syntax and conventions. If the code line is not a clear and valid function or object definition, set the 'status' to 'invalid_input'. If the line does not provide enough information to confidently determine the name, set the 'status' to 'insufficient_context'. Only set 'status' to 'valid' if there is high confidence that the line is indeed a function or object definition. Return only the 'output_schema' as valid JSON."
+    },
+    "sample_input": {
+        "code_line": "def train_model(model_id, model_type,",
+        "language": "python"
+    },
+    "expected_output": {
+        "name": "train_model",
+        "entity_type": "function",
+        "status": "valid",
+        "notes": "The 'train_model' function is clearly defined based on the 'def' keyword and syntax."
+    }
+}

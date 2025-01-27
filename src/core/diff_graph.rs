@@ -47,11 +47,11 @@ use crate::utils::gitops::StatItem;
 //     return Some(mermaid_comment);
 // }
 
-pub async fn generate_mermaid_html(diff_files: &Vec<StatItem>, prev_commit: &str, next_commit: &str, git_dir: &str, git_url: &str) {
-    mermaid_html(diff_files, prev_commit, next_commit, git_dir, git_url).await;
+pub async fn generate_mermaid_html(diff_files: &Vec<StatItem>, prev_commit: &str, next_commit: &str, git_dir: &str, git_url: &str, output_path: &str) {
+    mermaid_html(diff_files, prev_commit, next_commit, git_dir, git_url, output_path).await;
 }
 
-async fn mermaid_html(diff_files: &Vec<StatItem>, prev_commit: &str, next_commit: &str, git_dir: &str, git_url: &str) {
+async fn mermaid_html(diff_files: &Vec<StatItem>, prev_commit: &str, next_commit: &str, git_dir: &str, git_url: &str, output_path: &str) {
     let flowchart_str_opt = generate_mermaid_flowchart(diff_files, prev_commit, next_commit, git_dir, git_url).await;
     if flowchart_str_opt.is_none() {
         log::error!("[mermaid_html] Unable to generate flowchart for commits: {}, {}", prev_commit, next_commit);
@@ -77,7 +77,7 @@ async fn mermaid_html(diff_files: &Vec<StatItem>, prev_commit: &str, next_commit
     );
 
     // Specify the file path where the HTML will be written
-    let file_path = "/app/config/diffgraph.html";
+    let file_path = format!("{}/diffgraph.html", output_path);
 
     // Create and write to the file
     let file_res = File::create(file_path);

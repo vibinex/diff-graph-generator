@@ -1,0 +1,38 @@
+{
+  "instructions": {
+    "input_schema": {
+      "code_chunk": "string (code with line numbers embedded, each line is numbered as it appears in the original file)",
+      "language": "string (the programming language of the code, e.g., 'Java', 'Python', 'Rust', etc.)",
+      "file_path": "string (the path of the file from which the code chunk is extracted)"
+    },
+    "output_schema": {
+      "function_calls": [
+        {
+          "line_number": "integer",
+          "function_name": "string"
+        }
+      ],
+      "notes": "string (optional)"
+    },
+    "task_description": "Your task is to identify function calls in the provided code chunk that invoke functions defined within the same codebase. Exclude function calls from standard libraries or known third-party libraries. You may use the file path or naming conventions to determine if a function is part of the codebase. Return only the 'output_schema' as valid JSON."
+  },
+  "sample_input": {
+    "code_chunk": "1 import os\n2 import my_lib.utils as utils\n3 from my_lib.models import Model\n4 from third_party_lib import external_func\n5 def train_model():\n6    model = Model()\n7    utils.custom_train(model)\n8    external_func()\n9    os.path.join('a', 'b')\n10    return model",
+    "language": "Python",
+    "file_path": "src/train.py"
+  },
+  "expected_output": {
+    "function_calls": [
+      {
+        "line_number": 7,
+        "function_name": "custom_train"
+      }
+    ],
+    "notes": "The 'custom_train' function is part of the codebase because it's imported from 'my_lib', which appears to be a local library. The 'Model' function, 'external_func', and 'os.path.join' are excluded because they belong to third-party or standard libraries."
+  },
+  "input": {
+    "code_chunk": "1 use std::collections::HashMap;\n2 fn main() {\n3    let mut map = HashMap::new();\n4    custom_process(map);\n5    standard_library_func();\n6 }",
+    "language": "Rust",
+    "file_path": "src/main.rs"
+  }
+}

@@ -1,0 +1,32 @@
+{
+    "instructions": {
+        "input_schema": {
+            "code_chunk": "string (code with line numbers embedded, each line is numbered as it appears in the original file)",
+            "language": "string (the programming language of the code, e.g., 'Java', 'Python', 'Rust', etc.)",
+            "function_name": "string (the name of the function you want to search for)"
+        },
+        "output_schema": {
+            "function_definition": {
+                "line_number": "integer (the line number where the function is defined, if defined)"
+            },
+            "notes": "string (optional)"
+        },
+        "task_description": "Your task is to search for the definition of the provided function name in the code chunk. If the function is found, return the line number where the function is defined, along with the function name. Return only the 'output_schema' as valid JSON."
+    },
+    "sample_input": {
+        "code_chunk": "1 import my_lib.utils as utils\n2 from my_lib.models import Model\n3 def train_model():\n4    model = Model()\n5    utils.train(model)\n6    return model",
+        "language": "Python",
+        "function_name": "train_model"
+    },
+    "expected_output": {
+        "function_definition": {
+            "line_number": 3
+        },
+        "notes": "The 'train_model' function is defined on line 3 as it uses the 'def' keyword."
+    },
+    "input": {
+        "code_chunk": "1 use std::collections::HashMap;\n2 fn main() {\n3    let mut map = HashMap::new();\n4    process_data(map);\n5 }",
+        "language": "Rust",
+        "function_name": "main"
+    }
+}

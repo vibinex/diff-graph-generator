@@ -1,0 +1,27 @@
+{
+    "instructions": {
+        "input_schema": {
+            "code_chunk": "string (a chunk of code from a source code file that possibly contains a function, object, or structural definition)",
+            "language": "string (the programming language of the code, e.g., 'Java', 'Python', 'Rust', etc.)"
+        },
+        "output_schema": {
+            "definitions": [{
+                "line_number": "integer (the line number where the structure is defined, if defined)",
+                "structure_name": "string (the name of the structure)"
+            }],
+            "notes": "string (optional)"
+        },
+        "task_description": "Determine if any code line in the given code chunk represents a valid function, object, or structural definition in the specified programming language. Do not classify import statements, module declarations, or other non-definitional lines as valid definitions. If the line introduces a new function, object, struct, trait, or implementation block, set 'line_number' to the line where the structure is defined, along with the structure name. Return only the 'output_schema' as valid JSON."
+    },
+    "sample_input": {
+         "code_chunk": "1 import numpy as np\n2 import pandas as pd\n3 def foo():\n4     print('Hello World')",
+         "language": "python"
+     },
+    "expected_output": {
+         "definitions": [{
+            "line_number": 3,
+            "structure_name": "foo"
+        }],
+        "notes": "the third line contains a definition of function foo, as it uses the 'def' keyword"
+    }
+}
